@@ -8,8 +8,7 @@ int main(void)
 {
   uint32_t baud = 115200;
   uint32_t periph = 64000000;
-  uart_init_tx(periph,baud);
-
+  uart_init_tx(baud,periph);
   RCC->AHB2ENR |= (1U<<1);
   GPIOB->MODER |= (1U<<0);
   GPIOB->MODER &=~(1U<<1);
@@ -18,5 +17,7 @@ int main(void)
     GPIOB->ODR ^= (1U<<0);
     for(int i=0;i<1000000;i++);
     write_uart('a');
+    write_uart('/n');
+    write_uart('/r');
   }
  }
