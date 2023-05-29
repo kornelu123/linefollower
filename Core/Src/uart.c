@@ -61,10 +61,9 @@ void printint(int integer){
     integer = integer/10;
   }
 
-  write_char_uart(i + '0');
 
-  for(int j=i-1;string_int[j] != 0;j--){
-    write_char_uart(string_int[j] + '0');
+  for(int j=i;j != 0;j--){
+    write_char_uart(string_int[j]);
   }
 }
 
