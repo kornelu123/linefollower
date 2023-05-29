@@ -23,17 +23,32 @@ void uart_init_tx(uint32_t baud , uint32_t periph,uint32_t presc){
   //Setting the number of stop bits
   USART1->CR2   &=~ (1U << 12);
   USART1->CR2   &=~ (1U << 13);
-  //Disabling FIFO mode 
-  USART1->CR1   &=~ (1U << 29);
+  //Enabling FIFO mode 
+  USART1->CR1   |= (1U << 29);
   //Enabling UART  
   USART1->CR1   |=  (1U << 0);
   //Enabling Transfer for UART
   USART1->CR1   |=  (1U << 3);
 }
 
-void write_uart(uint8_t ch){
+void __io_putchar(uint8_t ch){
+  write_char_uart(ch);
+  return 1;
+}
+
+void write_char_uart(uint8_t ch){
+  if(ch == '\n'){
+    write_char_uart('\r');
+  }
   //Wait until Transfer Data Register is not full
   while(!(USART1->ISR && (1U<<7)));
   //Write to Transmit Data Register
   USART1->TDR = (uint8_t) ( ch & 0xFFU );
+}
+
+void write_string_uart(char *text){
+  for(int i=0;text[i] != '\0';i++){
+    write_char_uart(text[i]);
+  }
+  write_char_uart('\n');
 }
