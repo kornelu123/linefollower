@@ -31,24 +31,41 @@ void uart_init_tx(uint32_t baud , uint32_t periph,uint32_t presc){
   USART1->CR1   |=  (1U << 3);
 }
 
-void __io_putchar(uint8_t ch){
-  write_char_uart(ch);
-  return 1;
-}
+
 
 void write_char_uart(uint8_t ch){
   if(ch == '\n'){
     write_char_uart('\r');
   }
   //Wait until Transfer Data Register is not full
-  while(!(USART1->ISR && (1U<<7)));
+  while(!(USART1->ISR && (1U << 23)));
   //Write to Transmit Data Register
   USART1->TDR = (uint8_t) ( ch & 0xFFU );
 }
 
-void write_string_uart(char *text){
+void prints(char *text){
   for(int i=0;text[i] != '\0';i++){
+    if(i%100==99) write_char_uart('\n');
     write_char_uart(text[i]);
+    for(int i=0;i<100;i++);
   }
-  write_char_uart('\n');
 }
+
+void printint(int integer){
+  int *string_int;
+  int i = 0;
+  string_int[i] = 0;
+  
+  for(i=1;integer != 0;i++){
+    string_int[i] = integer%10 + '0';
+    integer = integer/10;
+  }
+
+  write_char_uart(i + '0');
+
+  for(int j=i-1;string_int[j] != 0;j--){
+    write_char_uart(string_int[j] + '0');
+  }
+}
+
+

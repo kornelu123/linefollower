@@ -2,8 +2,6 @@
 #include "stm32wbxx.h"
 #include <stdint.h>
 #include "uart.h"
-#include <stdio.h>
-#include <utils.h>
 
 int main(void)
 {
@@ -17,7 +15,8 @@ int main(void)
   while (1)
   {
     GPIOB->ODR ^= (1U<<0);
-    delay_ms(1000);
-    write_string_uart("cipa");
+    for(int i=0;i<1000000;i++);
+    printint(3245324);
+    prints("\n");
   }
  } 
