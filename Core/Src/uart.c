@@ -1,6 +1,6 @@
 #include "uart.h"
 
-void uart_init_tx(uint32_t baud , uint32_t periph){
+void uart_init_tx(uint32_t baud , uint32_t periph,uint32_t presc){
   //Enabling clock access to GPIOB pin 
   RCC->AHB2ENR |= (1U << 1);
   //Enabling clock access to USART1 
@@ -19,7 +19,7 @@ void uart_init_tx(uint32_t baud , uint32_t periph){
   //Setting parity control to disabled
   USART1->CR1   &=~(1U << 10);
   //Selecting baudrate (115200)
-  USART1->BRR   = (uint8_t)(periph/baud);
+  USART1->BRR   = (uint8_t)(periph/(presc*baud));
   //Setting the number of stop bits
   USART1->CR2   &=~ (1U << 12);
   USART1->CR2   &=~ (1U << 13);
