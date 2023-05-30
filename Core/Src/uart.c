@@ -23,8 +23,8 @@ void uart_init_tx(uint32_t baud , uint32_t periph,uint32_t presc){
   //Setting the number of stop bits
   USART1->CR2   &=~ (1U << 12);
   USART1->CR2   &=~ (1U << 13);
-  //Enabling FIFO mode 
-  USART1->CR1   |= (1U << 29);
+  //Disabling FIFO mode 
+  USART1->CR1   &=~ (1U << 29);
   //Enabling UART  
   USART1->CR1   |=  (1U << 0);
   //Enabling Transfer for UART
@@ -37,32 +37,29 @@ void write_char_uart(uint8_t ch){
   if(ch == '\n'){
     write_char_uart('\r');
   }
-  //Wait until Transfer Data Register is not full
-  while(!(USART1->ISR && (1U << 23)));
+  //wait until transfer complete flag is set 
+  while((USART1->ISR & (1U<<6)) == 0);
   //Write to Transmit Data Register
-  USART1->TDR = (uint8_t) ( ch & 0xFFU );
+  USART1->TDR  = (uint8_t) ( ch & 0xFFU ); 
 }
 
 void prints(char *text){
   for(int i=0;text[i] != '\0';i++){
-    if(i%100==99) write_char_uart('\n');
     write_char_uart(text[i]);
-    for(int i=0;i<100;i++);
   }
 }
 
 void printint(int integer){
-  int *string_int;
+  char string_int[11];
   int i = 0;
   string_int[i] = 0;
   
-  for(i=1;integer != 0;i++){
+  for(;integer != 0;i++){
     string_int[i] = integer%10 + '0';
     integer = integer/10;
   }
 
-
-  for(int j=i;j != 0;j--){
+  for(int j=i;j >= 0;j--){
     write_char_uart(string_int[j]);
   }
 }
