@@ -38,7 +38,8 @@ BUILD_DIR = build
 C_SOURCES =  \
 Core/Src/uart.c \
 Core/Src/main.c \
-Core/Src/system_stm32wbxx.c 
+Core/Src/system_stm32wbxx.c \
+Core/Src/adc.c
 
 # ASM sources
 ASM_SOURCES =  \

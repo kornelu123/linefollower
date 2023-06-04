@@ -54,10 +54,11 @@ void printint(int integer){
   int i = 0;
   string_int[i] = 0;
   
-  for(;integer != 0;i++){
+  do{
     string_int[i] = integer%10 + '0';
     integer = integer/10;
-  }
+    i++;
+  }while(integer != 0);
 
   for(int j=i;j >= 0;j--){
     write_char_uart(string_int[j]);
