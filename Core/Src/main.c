@@ -19,8 +19,7 @@ int main(void)
   {
     uint16_t adc_value = adc_read();
     GPIOB->ODR ^= (1U<<0);
-    for(int i=0;i<1000000;i++);
-    prints("Adc value : ");   
+    for(int i=0;i<100000;i++);
     printint(adc_value);
     prints("\n");
   }
